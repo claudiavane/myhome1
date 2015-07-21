@@ -1,0 +1,101 @@
+<ion-view view-title="Publish">
+  <ion-content scroll="true">
+    <div class="list list-inset">
+      <label class="item item-input item-select">
+        <span class="input-label">Ciudad:</span>
+        <select ng-model="product.city">
+          <option>La Paz</option>
+          <option selected>Cochabamba</option>
+          <option>Oruro</option>
+          <option>Santa Cruz</option>
+          <option>Potosi</option>
+          <option>Tarija</option>
+          <option>Beni</option>
+          <option>Pando</option>
+        </select>
+      </label>
+
+      <label class="item item-input item-select">
+        <span class="input-label">Zona:</span>
+        <select ng-model="product.zone">
+          <option>Queru Queru</option>
+          <option>Tiquipaya</option>
+          <option>Chillimarca</option>
+          <option>Quillacollo</option>
+          <option>Colcapirhua</option>
+          <option>Sumumpaya</option>
+          <option>Villa Bush</option>
+          <option>Chimba</option>
+          <option>Pacata</option>
+          <option>Quintanilla</option>
+          <option>Sacaba</option>
+        </select>
+      </label>
+
+      <label class="item item-input item-select">
+        <span class="input-label">Tipo Inmueble:</span>
+        <select ng-model="product.houseType">
+          <option selected>Casa</option>
+          <option>Terreno</option>
+          <option>Edificio</option>
+          <option>Oficina</option>
+          <option>Departamento</option>
+        </select>
+        <!--<input type="text" ng-model="product.city">-->
+      </label>
+
+      <label class="item item-input item-select">
+        <span class="input-label">Tipo de Arrendamiento:</span>
+        <select ng-model="product.leaseType">
+          <option>Venta</option>
+          <option>Alquiler</option>
+          <option>Anticretico</option>
+        </select>
+        <!--<input type="text" ng-model="product.city">-->
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label" >Superficie:</span>
+        <input type="number" ng-model="product.surface">
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label" >Sup. Construida:</span>
+        <input type="number" ng-model="product.surfaceBuild">
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label" >Precio:</span>
+        <input type="number" ng-model="product.price">
+      </label>
+      <label class="item item-input">        
+        <textarea rows="4" placeholder="Descripcion" ng-model="product.description"></textarea>
+      </label>
+      <label class="item item-input">
+          <button class="button button-icon icon ion-camera" ng-click="takePicture()"> Seleccionar imagen </button>
+      </label>
+
+      <div class="item">
+        <b>Latitud: </b> {{product.location.latitude}}
+        <br>
+        <b>Longitud: </b> {{product.location.longitude}}
+      </div>
+      
+      <b>Contacto </b>      
+      <label class="item item-input">                  
+        <input type="text" placeholder="Nombre" ng-model="product.contact.name"></input>
+      </label>
+      <label class="item item-input">        
+        <input type="text" placeholder="Correo" ng-model="product.contact.email"></input>
+      </label>
+      <label class="item item-input">        
+        <input type="text" placeholder="Telefono"  ng-model="product.contact.phone"></input>
+      </label>
+      
+      <button class="button button-block button-assertive" ng-click="uploadProduct()">
+        Publicar
+      </button>
+    </div>
+    <div id="map" data-tap-disabled="true"></div>
+  </ion-content>
+</ion-view>

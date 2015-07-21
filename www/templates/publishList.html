@@ -1,0 +1,39 @@
+
+<ion-view view-title="Mis publicaciones" >
+  <ion-nav-buttons side="right">
+      <a class="button button-icon button-clear ion-android-add" href="#/app/publish"></a>
+      <!--<button class="button button-icon button-clear ion-android-add" href="#/app/browse">
+      </button>-->
+  </ion-nav-buttons>
+  <ion-content>
+    <div class="item item-input-inset" >
+	    <label class="item-input-wrapper">
+	      <i class="icon ion-search placeholder-icon"></i>
+	      <input type="text" ng-model="searchQuery">
+	    </label>
+    </div>
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-thumbnail-left" collection-repeat="product in products | filter:searchQuery" type="item-text-wrap" >
+        <img ng-src="{{product.image['img300x400'][0].url}}" >
+        
+        <h2>{{product.houseType}} en {{product.leaseType}}</h2>
+        <p>{{product.description}}</p>
+        <p>{{product.zone}}</p>        
+        <p class="badge badge-assertive">{{product.price}}</p>
+        <!--<i class="icon ion-ios-telephone-outline"></i>-->
+        <ion-option-button class="button-assertive" ng-click="remove(product)">
+          <i class="icon ion-trash-b"></i>
+        </ion-option-button>
+        <ion-option-button class="button-dark" ng-click="remove(product)">
+          <i class="icon ion-edit"></i>
+        </ion-option-button>
+      </ion-item>
+      <!--
+      <ion-infinite-scroll on-infinite="addItems()"></ion-infinite-scroll>-->
+    </ion-list>
+  </ion-content>
+</ion-view>

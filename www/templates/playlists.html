@@ -1,0 +1,96 @@
+<ion-view view-title="Buscar MiCasa">
+  <ion-content>
+  <div>
+  	<label class="item item-input item-select">
+        <span class="input-label">Ciudad</span>
+        <select ng-model="product.city" class="select select-assertive">
+          <option>La Paz</option>
+          <option selected>Cochabamba</option>
+          <option>Oruro</option>
+          <option>Santa Cruz</option>
+          <option>Potosi</option>
+          <option>Tarija</option>
+          <option>Beni</option>
+          <option>Pando</option>
+        </select>
+      </label>
+
+      <label class="item item-input item-select">
+        <div class="input-label">Zona</div>
+        <select ng-model="product.zone">
+          <option selected>Todas</option>
+          <option>Queru Queru</option>
+          <option>Tiquipaya</option>
+          <option>Chillimarca</option>
+          <option>Quillacollo</option>
+          <option>Colcapirhua</option>
+          <option>Sumumpaya</option>
+          <option>Villa Bush</option>
+          <option>Chimba</option>
+          <option>Pacata</option>
+          <option>Quintanilla</option>
+          <option>Sacaba</option>
+        </select>
+      </label>
+
+      <label class="item item-input item-select">
+        <span class="input-label">Tipo Inmueble</span>
+        <select ng-model="product.houseType">
+          <option selected>Casa</option>
+          <option>Terreno</option>
+          <option>Edificio</option>
+          <option>Oficina</option>
+          <option>Departamento</option>
+        </select>
+        <!--<input type="text" ng-model="product.city">-->
+      </label>
+
+      
+		  <li class="item item-checkbox">
+		     <label class="checkbox checkbox-assertive">
+		       <input type="checkbox">
+		     </label>
+		     Venta
+		  </li>
+		  <li class="item item-checkbox">
+		     <label class="checkbox checkbox-assertive">
+		       <input type="checkbox">
+		     </label>
+		     Anticretico
+		  </li>
+		  <li class="item item-checkbox">
+		     <label class="checkbox checkbox-assertive">
+		       <input type="checkbox">
+		     </label>
+		     Alquiler
+		  </li>
+	  
+	  <label class="item item-input">
+		  <span class="input-label">Precio Min.</span>
+		  <input type="number">
+	  </label>
+	  <label class="item item-input">
+		  <span class="input-label">Precio Max.</span>
+		  <input type="number">
+	  </label>
+	  <li class="item item-toggle">
+	     Mostrar en Mapa
+	     <label class="toggle toggle-assertive">
+	       <input type="checkbox">
+	       <div class="track">
+	         <div class="handle"></div>
+	       </div>
+	     </label>
+	  </li>
+	  
+	  <label class="item">
+          <button class="button button-block button-energized" type="submit">Buscar</button>
+      </label>
+  </div>
+    <!--<ion-list>
+      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
+        {{playlist.title}}
+      </ion-item>
+    </ion-list>-->
+  </ion-content>
+</ion-view>
