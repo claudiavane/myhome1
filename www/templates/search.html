@@ -3,7 +3,7 @@
   <div>
   	<label class="item item-input item-select">
         <span class="input-label">Ciudad</span>
-        <select ng-model="product.city" class="select select-assertive">
+        <select ng-model="filter.city" class="select select-assertive">
           <option>La Paz</option>
           <option selected>Cochabamba</option>
           <option>Oruro</option>
@@ -17,7 +17,7 @@
 
       <label class="item item-input item-select">
         <div class="input-label">Zona</div>
-        <select ng-model="product.zone">
+        <select ng-model="filter.zone">
           <option selected>Todas</option>
           <option>Queru Queru</option>
           <option>Tiquipaya</option>
@@ -35,7 +35,7 @@
 
       <label class="item item-input item-select">
         <span class="input-label">Tipo Inmueble</span>
-        <select ng-model="product.houseType">
+        <select ng-model="filter.houseType">
           <option selected>Casa</option>
           <option>Terreno</option>
           <option>Edificio</option>
@@ -44,39 +44,38 @@
         </select>
         <!--<input type="text" ng-model="product.city">-->
       </label>
-
       
 		  <li class="item item-checkbox">
 		     <label class="checkbox checkbox-assertive">
-		       <input type="checkbox">
+		       <input type="checkbox" ng-model="filter.leaseSaleType">
 		     </label>
 		     Venta
 		  </li>
 		  <li class="item item-checkbox">
 		     <label class="checkbox checkbox-assertive">
-		       <input type="checkbox">
+		       <input type="checkbox" ng-model="filter.leaseAntiType">
 		     </label>
 		     Anticretico
 		  </li>
 		  <li class="item item-checkbox">
 		     <label class="checkbox checkbox-assertive">
-		       <input type="checkbox">
+		       <input type="checkbox" ng-model="filter.leaseRentalType">
 		     </label>
 		     Alquiler
 		  </li>
 	  
 	  <label class="item item-input">
 		  <span class="input-label">Precio Min.</span>
-		  <input type="number">
+		  <input type="number" ng-model="filter.minPrice">
 	  </label>
 	  <label class="item item-input">
 		  <span class="input-label">Precio Max.</span>
-		  <input type="number">
+		  <input type="number" ng-model="filter.maxPrice">
 	  </label>
 	  <li class="item item-toggle">
 	     Mostrar en Mapa
 	     <label class="toggle toggle-assertive">
-	       <input type="checkbox">
+	       <input type="checkbox" ng-model="filter.isShowMap">
 	       <div class="track">
 	         <div class="handle"></div>
 	       </div>
@@ -84,7 +83,7 @@
 	  </li>
 	  
 	  <label class="item">
-          <button class="button button-block button-energized" type="submit">Buscar</button>
+          <button class="button button-block button-energized" type="submit" ng-click="goList(filter)">Buscar</button>
       </label>
   </div>
     <!--<ion-list>

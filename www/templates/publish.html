@@ -1,6 +1,6 @@
-<ion-view view-title="Publish">
+<ion-view view-title="Publicar Inmueble">
   <ion-content scroll="true">
-    <div class="list list-inset">
+    <div>
       <label class="item item-input item-select">
         <span class="input-label">Ciudad:</span>
         <select ng-model="product.city">
@@ -56,12 +56,12 @@
 
       <label class="item item-input">
         <span class="input-label" >Superficie:</span>
-        <input type="number" ng-model="product.surface">
+        <input type="number" placeholder="Sup. en m2" ng-model="product.surface">
       </label>
 
       <label class="item item-input">
         <span class="input-label" >Sup. Construida:</span>
-        <input type="number" ng-model="product.surfaceBuild">
+        <input type="number" placeholder="Sup. en m2" ng-model="product.surfaceBuild">
       </label>
 
       <label class="item item-input">
@@ -71,31 +71,48 @@
       <label class="item item-input">        
         <textarea rows="4" placeholder="Descripcion" ng-model="product.description"></textarea>
       </label>
+      <li class="item item-toggle">
+       Acepta Financiamiento Bancario?
+       <label class="toggle toggle-assertive">
+         <input type="checkbox">
+         <div class="track">
+           <div class="handle"></div>
+         </div>
+       </label>
+      </li>
       <label class="item item-input">
-          <button class="button button-icon icon ion-camera" ng-click="takePicture()"> Seleccionar imagen </button>
+          <button class="button button-icon icon ion-camera" ng-click="takePicture()"> Seleccionar foto de portada</button>
+      </label>
+      <label class="item item-input">
+          <button class="button button-icon icon ion-camera" ng-click="takePicture()"> Seleccionar fotos del inmuebe</button>
       </label>
 
-      <div class="item">
+      <label class="item item-input">
+          <button class="button button-icon icon ion-location" ng-click="goLocation()"> Fijar ubicacion</button>
+      </label>
+
+
+      <!--<div class="item">
         <b>Latitud: </b> {{product.location.latitude}}
         <br>
         <b>Longitud: </b> {{product.location.longitude}}
-      </div>
+      </div>-->
       
-      <b>Contacto </b>      
+      <b>  Datos del Contacto </b>      
       <label class="item item-input">                  
         <input type="text" placeholder="Nombre" ng-model="product.contact.name"></input>
       </label>
       <label class="item item-input">        
-        <input type="text" placeholder="Correo" ng-model="product.contact.email"></input>
+        <input type="email" placeholder="Correo" ng-model="product.contact.email"></input>
       </label>
       <label class="item item-input">        
-        <input type="text" placeholder="Telefono"  ng-model="product.contact.phone"></input>
+        <input type="tel" placeholder="Telefono"  ng-model="product.contact.phone"></input>
       </label>
       
-      <button class="button button-block button-assertive" ng-click="uploadProduct()">
-        Publicar
+      <button class="button button-block button-energized" ng-click="uploadProduct()">
+        Guardar
       </button>
     </div>
-    <div id="map" data-tap-disabled="true"></div>
+    
   </ion-content>
 </ion-view>

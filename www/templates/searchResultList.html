@@ -1,0 +1,27 @@
+
+<ion-view view-title="3 Inmuebles Encontrados" >
+  <ion-nav-buttons side="right">
+      <a class="button button-icon button-clear ion-location" href="#/app/searchResultMap"></a>
+      <!--<button class="button button-icon button-clear ion-android-add" href="#/app/browse">
+      </button>-->
+  </ion-nav-buttons>
+  <ion-content>    
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-thumbnail-left" collection-repeat="product in products" type="item-text-wrap" href="#/app/homeDetail/{{product.$id}}">
+        <img ng-src="{{product.image['img300x400'][0].url}}">
+        <h2>{{product.houseType}} en {{product.leaseType}}</h2>
+        <p>{{product.description}}</p>
+        <p>{{product.zone}}</p>        
+        <p>{{product.price}}</p>
+        <!--<i class="icon ion-ios-telephone-outline"></i>-->
+        <span class="badge badge-assertive" ng-show="product.isSold == '1'">Vendido</span>
+      </ion-item>
+      <!--
+      <ion-infinite-scroll on-infinite="addItems()"></ion-infinite-scroll>-->
+    </ion-list>
+  </ion-content>
+</ion-view>

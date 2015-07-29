@@ -1,3 +1,4 @@
+var firebaseUrl = "https://sweltering-inferno-1375.firebaseio.com";
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -21,7 +22,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
 
     $rootScope.token = null;
-    $rootScope.refirebase = new Firebase("https://shining-inferno-7335.firebaseio.com");    
+    $rootScope.refirebase = new Firebase("https://shining-inferno-7335.firebaseio.com");
+    $rootScope.firebaseUrl = firebaseUrl;
+    console.log($rootScope.firebaseUrl);
 
     $rootScope.show = function(text) {
       $rootScope.loading = $ionicLoading.show({
@@ -77,14 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $state.go('sign-in');
         //$window.location.href = '#/';
         //console.log("User " + authData.uid + " is logged in with " + authData.provider);
-      } 
-      //else {
-        //$ionicHistory.nextViewOptions({
-        //  disableAnimate: true,
-        //  disableBack: true
-        //});
-        //$state.go('sign-in');
-      //}
+      }      
     }
 
   });
@@ -101,10 +97,61 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.search', {
-    url: '/search',
+      url: '/search',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/search.html',
+          controller: 'SearchCtrl'
+        }
+      }
+  })
+
+  .state('app.searchResultList', {
+    url: '/searchResultList',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/searchResultList.html',
+        controller: 'SearchResultListCtrl'
+      }
+    }
+  })
+
+  .state('app.homeDetail', {
+    url: '/homeDetail/:itemId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/homeDetail.html',
+        controller: 'HomeDetailCtrl'
+      }
+    }
+  })
+
+  .state('app.homeDetailLocation', {
+    url: '/homeDetailLocation/:itemId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/homeDetailLocation.html',
+        controller: 'HomeDetailLocationCtrl'
+      }
+    }
+  })
+
+  .state('app.homeDetailContact', {
+    url: '/homeDetailContact/:itemId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/homeDetailContact.html',
+        controller: 'HomeDetailContactCtrl'
+      }
+    }
+  })  
+
+  .state('app.searchResultMap', {
+    url: '/searchResultMap',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/searchResultMap.html',
+        controller: 'SearchResultMapCtrl'
       }
     }
   })
@@ -129,6 +176,25 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('app.publish-edit', {
+    url: '/publish/:productId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/publish.html',
+        controller: 'PublishCtrl'
+      }
+    }
+  })
+
+  .state('app.publishLocation', {
+    url: '/publishLocation',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/publishLocation.html',
+        controller: 'PublishLocationCtrl'
+      }
+    }
+  })
 
   .state('app.browse', {
       url: '/browse',
@@ -137,16 +203,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           templateUrl: 'templates/browse.html'
         }
       }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
+  })
 
   .state('app.single', {
     url: '/playlists/:playlistId',
@@ -158,5 +215,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/search');
 });

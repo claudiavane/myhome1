@@ -1,4 +1,34 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['firebase'])
+
+.factory('HoseData', function ($firebase, $firebaseArray) {
+
+    var ref = new Firebase(firebaseUrl);
+    var products = $firebaseArray(ref);
+
+    return {
+        all: function () {
+            return products;
+        },
+        remove: function (product) {
+            products.$remove(product).then(function (ref) {
+                ref.key() === product.$id; // true item has been removed
+            });
+        },
+        updateIsSold: function (product) {
+            products.$remove(product).then(function (ref) {
+                ref.key() === product.$id; // true item has been removed
+            });
+        },
+        get: function (productId) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === parseInt(productId)) {
+                    return products[i];
+                }
+            }
+            return null;
+        }        
+    }
+})
 
 .factory('$localstorage', ['$window', function($window) {
   return {
@@ -16,3 +46,5 @@ angular.module('starter.services', [])
     }
   }
 }]);
+
+

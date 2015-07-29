@@ -1,0 +1,42 @@
+<ion-view view-title="Contacts">
+  <div class="item tabs tabs-secondary tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">
+    
+      <a class="tab-item" href="#/app/homeDetail/{{product.$id}}">
+        <i class="icon ion-document-text" ></i>
+        Descripcion
+      </a>
+      <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
+        <i class="icon ion-ios-location"></i>
+        Ubicacion
+      </a>
+      <a class="tab-item active" href="#" >
+        <i class="icon ion-person"></i>
+        Contacto
+      </a>
+    
+  </div>
+  <ion-content>
+    <div class="list card">
+    	<div class="item item-icon-left">
+		    <i class="icon ion-android-contact"></i>
+		    <h2>{{product.contact.name}}</h2>
+		    <p>{{product.contact.email}}</p>
+		    <p>{{product.contact.phone}}</p>
+		</div>    	
+	    <!--<div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#/tab/dash/{{product.$id}}">
+          <i class="icon ion-document-text" ></i>
+          Descripcion
+        </a>
+        <a class="tab-item" href="#/tab/map/{{product.$id}}">
+          <i class="icon ion-ios-location"></i>
+          Ubicacion
+        </a>
+        <a class="tab-item active" href="#" >
+          <i class="icon ion-person"></i>
+          Contacto
+        </a>
+      </div>-->
+    </div>
+  </ion-content>
+</ion-view>

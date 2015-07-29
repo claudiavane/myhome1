@@ -41,123 +41,107 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   };
 })
 
+.controller('SearchCtrl', function($scope, $state, HoseData) {
+  console.log("SearchCtrl...");
+  /*$scope.search = function (filter) {
+        HoseData.get(filter);
+  } */
+  $scope.goList = function() {
+      $state.go('app.searchResultList'); 
+    }
+  
+})
 
-.controller('PublishListCtrl', function($scope, $firebaseArray) {
+.controller('SearchResultListCtrl', function($scope, $stateParams, $rootScope, HoseData) {
+  console.log("SearchResultListCtrl....");
+  $scope.products = HoseData.all(); 
+})
 
-  //$scope.ref = new Firebase("https://shining-inferno-7335.firebaseio.com/products");
-  $scope.ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com");
-  $scope.products = $firebaseArray($scope.ref);
+.controller('SearchResultMapCtrl', function($scope, $stateParams) {
+})
 
+.controller('HomeDetailCtrl', function($scope, $stateParams, $firebaseObject) {
 
-  $scope.addItems = function() {
-    var product = {'name':'Iphone', 'sale_price': 78.10, 'img':'http://www.att.com/wireless/iphone/assets/207138-iPhone6-device2.jpg'};
-    var product2 = {'name':'Android', 'sale_price': 78.10, 'img':'http://www.att.com/wireless/iphone/assets/207138-iPhone6-device2.jpg'};
-    $scope.products.push(product);
-    $scope.products.push(product2);
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.itemId);
+  $scope.product = $firebaseObject(ref);
+})
 
-    $scope.$broadcast('scroll.infiniteScrollComplete')
-  }
+.controller('HomeDetailLocationCtrl', function($scope, $rootScope, $stateParams, $firebaseObject) {
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
+  $scope.product = $firebaseObject(ref);
 
-  $scope.doRefresh = function() {
-    var product = {'name':'Iphone', 'sale_price': 78.10, 'img':'http://www.att.com/wireless/iphone/assets/207138-iPhone6-device2.jpg'};
-    var product2 = {'name':'Android', 'sale_price': 78.10, 'img':'http://www.att.com/wireless/iphone/assets/207138-iPhone6-device2.jpg'};
-    $scope.products.push(product);
-    $scope.products.push(product2);
+  $scope.product.$loaded().then(function() {
+    $scope.loadMap();
+  });
 
-    //$scope.$broadcast('scroll.infiniteScrollComplete')
+  $scope.loadMap = function(){
+
+    var myLatlng = new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude);
+
+    var mapOptions = {
+        center: myLatlng,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("map1"), mapOptions);
+
+    var marker = new google.maps.Marker({
+            position: new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude),
+            map: map,
+            title: $scope.product.zone
+    });
   }
 
 })
 
-
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('HomeDetailContactCtrl', function($scope, $stateParams, $firebaseObject) {
+  //$state.go('sign-in');
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
+  $scope.product = $firebaseObject(ref);
+  console.log($scope.product);
 })
 
-.controller('PublishCtrl', function($scope, $firebaseArray, $rootScope, $state, $cordovaCamera, $cordovaGeolocation) {
-     
+
+
+.controller('PublishListCtrl', function($scope, $rootScope, HoseData, $firebaseArray) {
+  console.log("PublishListCtrl...");
+  $scope.products = HoseData.all();  
+
+  $scope.remove = function (product) {
+        HoseData.remove(product);
+  }
+  $scope.edit = function (product) {
+        HoseData.remove(product);
+  }
+  $scope.setIsSold = function (product) {
+        HoseData.updateIsSold(product);
+  }
+})
+
+.controller('PublishCtrl', function($scope, $stateParams, $firebaseObject, $firebaseArray, $rootScope, $state, $cordovaCamera, $cordovaGeolocation) {     
       console.log("Publish...");
       //if (!$rootScope.userSignedIn()){
         //$state.go('sign-in');
       //} 
-
       $scope.refire = new Firebase("https://sweltering-inferno-1375.firebaseio.com");
+
+      console.log($stateParams.productId);
+      if ($stateParams.productId) {
+        console.log("Edit...");
+        var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
+        $scope.product = $firebaseObject(ref);
+        
+      } else {
+        console.log("New...");
+        $scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};         
+      }
+
       //$scope.product = {name: '', sale_price: '', content: {description: ''}, photo: '', lat: -17.37, long: -66.15};
       //$scope.product = {city: '', description: '', houseId: '', houseType: '', leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
-      $scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
-
-      var myLatlng = new google.maps.LatLng(-17.37, -66.15);
-      var mapOptions = {
-          center: myLatlng,
-          zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-
-      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-      var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(-17.37, -66.15),
-              map: map,
-              title: "Mi locacion",
-              options: { draggable: true }
-      });
-
-      var posOptions = {timeout: 10000, enableHighAccuracy: false};
-
-      $cordovaGeolocation
-      .getCurrentPosition(posOptions)
-      .then(function (position) {
-        console.log(position);
-        $scope.product.location.latitude  = position.coords.latitude
-        $scope.product.location.longitude = position.coords.longitude
-
-      map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-          
-      marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-
-      }, function(err) {
-          console.log(err);
-      });
-
-      var watchOptions = {
-        frequency : 1000,
-        timeout : 3000,
-        enableHighAccuracy: false // may cause errors if true
-      };
-
-      var watch = $cordovaGeolocation.watchPosition(watchOptions);
-      watch.then(
-        null,
-        function(err) {
-          console.log(err);
-        },
-        function(position) {
-          console.log(position);
-          $scope.product.location.latitude  = position.coords.latitude;
-          $scope.product.location.longitude = position.coords.longitude;
-
-          marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-
-    });
-
-    google.maps.event.addListener(marker, 'dragend', function() {
-        $scope.$apply(function(){
-          //Stop listening changes
-          watch.clearWatch();
-          var pos = marker.getPosition();
-          console.log(pos);
-          $scope.product.location.latitude  = pos.A;
-          $scope.product.location.longitude = pos.F;
-        });
-    });
-
+      
+      //console.log($scope.product.location.latitude);
+      //console.log($scope.product.location.longitude);
 
     //document.addEventListener("deviceready", function () {
     $scope.takePicture = function() {
@@ -186,15 +170,110 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
     $scope.uploadProduct = function() {
 
-      var productRef =  $scope.refire.push($scope.product);
       console.log($scope.product.location.latitude);
+      console.log($scope.product.location.longitude);
 
+      var productRef =  $scope.refire.push($scope.product);
       var productId = productRef.key();
-      console.log(productId);
       $state.go('app.publishList');
     }
+
+    $scope.goLocation = function() {
+      $state.go('app.publishLocation');
+    }
+
 })
 
+.controller('PublishLocationCtrl', function($scope, $rootScope, $state, $cordovaGeolocation) {
+     
+      console.log("PublishLocation...");
+      //if (!$rootScope.userSignedIn()){
+        //$state.go('sign-in');
+      //} 
+      $scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
+      //var posLat = $scope.product.location.latitude;
+      //var posLon = $scope.product.location.longitude;
+
+      var positionLtLg;
+      var myLatlng = new google.maps.LatLng(-17.37, -66.15);
+      var mapOptions = {
+          center: myLatlng,
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(-17.37, -66.15),
+              map: map,
+              title: "Mi locacion",
+              animation: google.maps.Animation.DROP,
+              options: { draggable: true }
+      });
+      
+      var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
+      $cordovaGeolocation
+      .getCurrentPosition(posOptions)
+      .then(function (position) {
+        console.log(position.coords.latitude);
+        console.log(position.coords.longitude);
+        //$scope.product.location.latitude  = position.coords.latitude
+        //$scope.product.location.longitude = position.coords.longitude
+        map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+
+        marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+
+      }, function(err) {
+          console.log(err);
+      });
+
+      var watchOptions = {
+        frequency : 1000,
+        timeout : 3000,
+        enableHighAccuracy: false // may cause errors if true
+      };
+
+      var watch = $cordovaGeolocation.watchPosition(watchOptions);
+      watch.then(
+        null,
+        function(err) {
+          console.log(err);
+        },
+        function(position) {
+          
+          //$scope.product.location.latitude  = position.coords.latitude;
+          //$scope.product.location.longitude = position.coords.longitude;
+          marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+      });
+
+      google.maps.event.addListener(marker, 'dragend', function() {
+          $scope.$apply(function(){
+            //Stop listening changes
+            watch.clearWatch();
+            //var pos = marker.getPosition();
+            positionLtLg = marker.getPosition();
+            //console.log(pos);
+            //$scope.product.location.latitude  = pos.A;
+            //$scope.product.location.longitude = pos.F;
+            console.log(positionLtLg.A);
+            console.log(positionLtLg.F);
+          });
+      });
+
+      $scope.setLocation = function() {
+
+        positionLtLg = marker.getPosition();
+
+        $scope.product.location.latitude  = positionLtLg.A;
+        $scope.product.location.longitude = positionLtLg.F;
+        console.log($scope.product.location.latitude);
+        console.log($scope.product.location.longitude);
+    
+        $state.go('app.publish');
+      }
+})
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 });
