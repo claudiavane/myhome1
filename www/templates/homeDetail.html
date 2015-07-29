@@ -1,5 +1,5 @@
 <ion-view view-title="Detalle del Inmueble" ng-init="loadMap">  
-  <ion-header-bar align-title="left" class="bar bar-subheader bar-assertive">
+  <ion-header-bar align-title="left" class="bar bar-subheader">
     <!--<div class="tabs-striped tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">
         <a class="tab-item active" href="#">
           <i class="icon ion-document-text" ></i>
@@ -13,8 +13,8 @@
           <i class="icon ion-person"></i>
           Contacto
         </a>
-    </div>-->
-    <div class="item tabs tabs-striped tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">
+    </div>    
+    <div class="tabs-striped tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">      
         <a class="tab-item" href="#/tab/dash/{{product.$id}}">
           <i class="icon ion-document-text" ></i>
           Descripcion
@@ -26,11 +26,25 @@
         <a class="tab-item active" href="#" >
           <i class="icon ion-person"></i>
           Contacto
-        </a>
-      </div>
+        </a>      
+    </div>-->
+    <div class="item tabs tabs-icon-left tabs-color-assertive">
+      <a class="tab-item active" href="#">
+          <i class="icon ion-document-text" ></i>
+          Descripcion
+      </a>
+      <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
+        <i class="icon ion-ios-location"></i>
+        Ubicacion
+      </a>
+      <a class="tab-item" href="#/app/homeDetailContact/{{product.$id}}" >
+        <i class="icon ion-person"></i>
+        Contacto
+      </a>
+    </div>
   </ion-header-bar>
-  <ion-content class="has-header has-subheader">
-    <div class="list card">
+  <ion-content class="has-header">
+    <div class="list card">      
       <div class="item item-divider">
         <h2>{{product.houseType}} en {{product.leaseType}} </h2>
         <p><b>Fecha Publicacion: </b>{{product.registerDate}}</p>
@@ -44,8 +58,10 @@
         <p><b>Sup. Construida: </b>{{product.surfaceBuild}}</p>
         <p><b>Descripcion: </b>{{product.description}}</p>
         <p>
-          <a href="#" class="button icon-left ion-star button-clear button-darck">Agregar a favoritos</a> 
-          <a href="#" class="button icon-left ion-android-share-alt button-clear button-darck">Compartir</a>
+          <!--<a href="#" class="button icon-left ion-star button-clear button-dark">Agregar a favoritos</a> 
+          <a href="#" class="button icon-left ion-android-share-alt button-clear button-dark">Compartir</a>-->
+          <a class="button button-clear icon-left ion-share button-dark" href="#">Compartir</a>
+          <a class="button button-clear icon-left ion-star button-assertive" href="#">Agregar a favoritos</a>
         </p>
       </div>             
     </div>    
