@@ -64,14 +64,25 @@
 		     Alquiler
 		  </li>
 	  
-	  <label class="item item-input">
+	  <!--<label class="item item-input">
 		  <span class="input-label">Precio Min.</span>
 		  <input type="number" ng-model="filter.minPrice">
 	  </label>
 	  <label class="item item-input">
 		  <span class="input-label">Precio Max.</span>
 		  <input type="number" ng-model="filter.maxPrice">
-	  </label>
+	  </label>-->
+    <div>      
+      <div class="item range range-assertive">
+        <i class="icon ion-social-usd-outline"></i>
+        <p>0</p>
+        <input type="range" name="volume" min="0" max="500000" value="{{slider.price}}" ng-model="slider.price">
+        <i class="icon ion-social-usd"></i>
+        <p>500.000</p>
+      </div>
+      Precio: {{slider.price}} $
+    </div>  
+    
 	  <li class="item item-toggle">
 	     Mostrar en Mapa
 	     <label class="toggle toggle-assertive">

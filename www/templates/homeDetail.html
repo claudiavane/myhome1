@@ -1,37 +1,11 @@
 <ion-view view-title="Detalle del Inmueble" ng-init="loadMap">  
-  <ion-header-bar align-title="left" class="bar bar-subheader">
-    <!--<div class="tabs-striped tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">
-        <a class="tab-item active" href="#">
-          <i class="icon ion-document-text" ></i>
-          Descripcion
-        </a>
-        <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
-          <i class="icon ion-ios-location"></i>
-          Ubicacion
-        </a>
-        <a class="tab-item" href="#/app/homeDetailContact/{{product.$id}}" >
-          <i class="icon ion-person"></i>
-          Contacto
-        </a>
-    </div>    
-    <div class="tabs-striped tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">      
-        <a class="tab-item" href="#/tab/dash/{{product.$id}}">
-          <i class="icon ion-document-text" ></i>
-          Descripcion
-        </a>
-        <a class="tab-item" href="#/tab/map/{{product.$id}}">
-          <i class="icon ion-ios-location"></i>
-          Ubicacion
-        </a>
-        <a class="tab-item active" href="#" >
-          <i class="icon ion-person"></i>
-          Contacto
-        </a>      
-    </div>-->
-    <div class="item tabs tabs-icon-left tabs-color-assertive">
+  <ion-header-bar align-title="left" class="bar bar-subheader">    
+    <!--<div class="item tabs tabs-striped tabs-icon-left tabs-color-assertive">-->
+    <div class="tabs-striped tabs-icon-left tabs-background-assertive tabs-color-light">
+    <div class="tabs">
       <a class="tab-item active" href="#">
-          <i class="icon ion-document-text" ></i>
-          Descripcion
+        <i class="icon ion-document-text"></i>
+        Descripcion
       </a>
       <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
         <i class="icon ion-ios-location"></i>
@@ -41,6 +15,7 @@
         <i class="icon ion-person"></i>
         Contacto
       </a>
+      </div>
     </div>
   </ion-header-bar>
   <ion-content class="has-header">

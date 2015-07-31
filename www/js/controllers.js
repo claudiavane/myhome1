@@ -46,6 +46,17 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   /*$scope.search = function (filter) {
         HoseData.get(filter);
   } */
+
+  $scope.slider = {};
+  $scope.slider.price = 200000;
+    
+  $scope.$watch('slider.price',function(val,old){
+     $scope.slider.price = parseInt(val);
+     console.log('range=' + $scope.slider.price)
+      
+  });
+
+
   $scope.goList = function() {
       $state.go('app.searchResultList'); 
     }
@@ -55,27 +66,30 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 .controller('SearchResultListCtrl', function($scope, $stateParams, $rootScope, HoseData) {
   console.log("SearchResultListCtrl....");
   $scope.products = HoseData.all(); 
+
 })
 
 .controller('SearchResultMapCtrl', function($scope, $stateParams) {
 })
 
 .controller('HomeDetailCtrl', function($scope, $stateParams, $firebaseObject) {
-
-  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.itemId);
+  console.log("HomeDetailCtrl...");
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
+  console.log($scope.product);
 })
 
 .controller('HomeDetailLocationCtrl', function($scope, $rootScope, $stateParams, $firebaseObject) {
+  console.log("HomeDetailLocationCtrl...");
   var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
+  console.log($scope.product);
 
   $scope.product.$loaded().then(function() {
     $scope.loadMap();
   });
 
   $scope.loadMap = function(){
-
     var myLatlng = new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude);
 
     var mapOptions = {
@@ -96,13 +110,12 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 })
 
 .controller('HomeDetailContactCtrl', function($scope, $stateParams, $firebaseObject) {
-  //$state.go('sign-in');
+  console.log("HomeDetailContactCtrl...");
   var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
   console.log($scope.product);
+  
 })
-
-
 
 .controller('PublishListCtrl', function($scope, $rootScope, HoseData, $firebaseArray) {
   console.log("PublishListCtrl...");

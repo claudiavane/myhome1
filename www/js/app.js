@@ -117,7 +117,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.homeDetail', {
-    url: '/homeDetail/:itemId',
+    url: '/homeDetail/:productId',
     views: {
       'menuContent': {
         templateUrl: 'templates/homeDetail.html',
@@ -127,7 +127,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.homeDetailLocation', {
-    url: '/homeDetailLocation/:itemId',
+    url: '/homeDetailLocation/:productId',
     views: {
       'menuContent': {
         templateUrl: 'templates/homeDetailLocation.html',
@@ -137,7 +137,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.homeDetailContact', {
-    url: '/homeDetailContact/:itemId',
+    url: '/homeDetailContact/:productId',
     views: {
       'menuContent': {
         templateUrl: 'templates/homeDetailContact.html',

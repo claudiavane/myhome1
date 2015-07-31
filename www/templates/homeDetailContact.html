@@ -1,21 +1,23 @@
-<ion-view view-title="Contacts">
-  <div class="item tabs tabs-secondary tabs-top tabs-background-assertive tabs-color-light tabs-icon-left">
-    
-      <a class="tab-item" href="#/app/homeDetail/{{product.$id}}">
-        <i class="icon ion-document-text" ></i>
-        Descripcion
-      </a>
-      <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
-        <i class="icon ion-ios-location"></i>
-        Ubicacion
-      </a>
-      <a class="tab-item active" href="#" >
-        <i class="icon ion-person"></i>
-        Contacto
-      </a>
-    
-  </div>
-  <ion-content>
+<ion-view view-title="Contacto">  
+  <ion-header-bar align-title="left" class="bar bar-subheader">  
+    <div class="tabs-striped tabs-icon-left tabs-background-assertive tabs-color-light">
+      <div class="tabs">
+        <a class="tab-item" href="#/app/homeDetail/{{product.$id}}">
+          <i class="icon ion-document-text" ></i>
+          Descripcion
+        </a>
+        <a class="tab-item" href="#/app/homeDetailLocation/{{product.$id}}">
+          <i class="icon ion-ios-location"></i>
+          Ubicacion
+        </a>
+        <a class="tab-item active" href="#" >
+          <i class="icon ion-person"></i>
+          Contacto
+        </a>
+      </div>
+    </div>
+  </ion-header-bar>
+  <ion-content class="has-header">
     <div class="list card">
     	<div class="item item-icon-left">
 		    <i class="icon ion-android-contact"></i>
