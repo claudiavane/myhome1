@@ -26,7 +26,12 @@
         <p><b>Vistas: </b>120</p>
       </div>
       <div class="item item-text-wrap">
-        <img class="full-image" src="{{product.image['img1080x1440'][0].url}}">
+        <!--<img class="full-image" src="{{product.image['img1080x1440'][0].url}}">-->
+        <a class="item item-list-detail">
+          <ion-scroll direction="x">
+          <img ng-repeat="image in allImages" ng-src="{{image.url}}" ng-click="showImages($index)" class="image-list-thumb"/>
+          </ion-scroll>
+        </a>
         <p><b>{{product.city}}: </b>{{product.zone}}</p>
         <p><b>Precio: </b>{{product.price}}</p>
         <p><b>Superficie: </b>{{product.surface}}</p>

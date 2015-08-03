@@ -196,11 +196,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('app.sign-in', {
+      url: '/sign-in',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/sign-in.html',
+          controller: 'SignInCtrl'
+        }
+      }
+  })
+
   .state('app.browse', {
       url: '/browse',
       views: {
         'menuContent': {
           templateUrl: 'templates/browse.html'
+        }
+      }
+  })
+
+  .state('app.help', {
+      url: '/help',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/help.html'
         }
       }
   })

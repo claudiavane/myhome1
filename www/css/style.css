@@ -1,4 +1,16 @@
 /* Empty. Add your own CSS if you like */
+.logo {
+    display: block;
+    position: relative;
+    width: 37%;
+    margin: 0 auto;
+}
+.logoText {
+    text-align: center;
+    font-size: 22px;
+    font-family: fantasy;
+    font-style: normal;
+}
 
 .scroll {
     height: 100%;

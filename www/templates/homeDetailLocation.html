@@ -1,4 +1,4 @@
-<ion-view view-title="Ubicacion">  
+<ion-view view-title="Ubicacion" ng-init="loadMap">  
   <ion-header-bar align-title="left" class="bar bar-subheader">  
     <div class="tabs-striped tabs-icon-left tabs-background-assertive tabs-color-light">
       <div class="tabs">
@@ -18,14 +18,14 @@
     </div>
   </ion-header-bar>
   <ion-content class="has-header">
-  	<div class="list card">
+  	<!--<div class="list card">
 	    <div class="item item-divider">
         <h2>Ubicacion</h2>
         <p><b>Latitud: </b>{{product.location.latitude}}</p>
         <p><b>Longitud: </b>{{product.location.longitude}}</p>
       </div>      	    
-    </div>
-    <div id="map1" class="map" data-tap-disabled="true"></div>
+    </div>-->
+    <div id="map" class="map" data-tap-disabled="true"></div>
     
   </ion-content>
 </ion-view>

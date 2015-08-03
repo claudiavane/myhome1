@@ -64,15 +64,15 @@
 		     Alquiler
 		  </li>
 	  
-	  <!--<label class="item item-input">
-		  <span class="input-label">Precio Min.</span>
-		  <input type="number" ng-model="filter.minPrice">
-	  </label>
-	  <label class="item item-input">
-		  <span class="input-label">Precio Max.</span>
-		  <input type="number" ng-model="filter.maxPrice">
-	  </label>-->
-    <div>      
+  	  <label class="item item-input">
+  		  <span class="input-label">Precio Min.</span>
+  		  <input type="number" ng-model="filter.minPrice">
+  	  </label>
+  	  <label class="item item-input">
+  		  <span class="input-label">Precio Max.</span>
+  		  <input type="number" ng-model="filter.maxPrice">
+  	  </label>
+    <!--<div>      
       <div class="item range range-assertive">
         <i class="icon ion-social-usd-outline"></i>
         <p>0</p>
@@ -81,20 +81,20 @@
         <p>500.000</p>
       </div>
       Precio: {{slider.price}} $
-    </div>  
+    </div> -->
     
-	  <li class="item item-toggle">
-	     Mostrar en Mapa
-	     <label class="toggle toggle-assertive">
-	       <input type="checkbox" ng-model="filter.isShowMap">
-	       <div class="track">
-	         <div class="handle"></div>
-	       </div>
-	     </label>
-	  </li>
-	  
-	  <label class="item">
-          <button class="button button-block button-energized" type="submit" ng-click="goList(filter)">Buscar</button>
+  	  <li class="item item-toggle">
+  	     Mostrar en Mapa
+  	     <label class="toggle toggle-assertive">
+  	       <input type="checkbox" ng-model="filter.isShowMap">
+  	       <div class="track">
+  	         <div class="handle"></div>
+  	       </div>
+  	     </label>
+  	  </li>
+  	  
+  	  <label class="item">
+          <button class="button button-block button-energized" type="submit" ng-click="search(filter)">Buscar</button>
       </label>
   </div>
     <!--<ion-list>

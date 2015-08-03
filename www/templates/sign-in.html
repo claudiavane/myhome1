@@ -1,0 +1,28 @@
+<ion-view view-title="Inicia Sesion">
+  <ion-content class="padding">
+    <div class="list">
+            <img src="img/login3.png" class="logo">
+            <div class="logoText">
+                MiCasa
+            </div>
+        </div>
+        <div class="list card padding">
+            <label class="item item-input">
+                <span class="input-label">Correo</span>
+                <input type="text" ng-model="user.email">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Contraseña</span>
+                <input type="password" ng-model="user.pwdForLogin">
+            </label>
+            <button ng-click="signIn(user)" class="button button-block button-energized activated">
+                Ingresar
+            </button>
+        </div>
+        <div class="list" style="text-align:center">
+            <button ng-click="modal.show()" class="button button-small button-outline icon-left ion-person-add button-dark">
+                Crear una cuenta
+            </button>
+        </div>
+  </ion-content>
+</ion-view>
