@@ -1,6 +1,6 @@
 angular.module('starter.services', ['firebase'])
 
-.factory('HoseData', function ($firebase, $firebaseArray) {
+.factory('HouseData', function ($firebase, $firebaseArray) {
 
     var ref = new Firebase(firebaseUrl);
     var products = $firebaseArray(ref);

@@ -112,7 +112,7 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 })
 
-.controller('SearchCtrl', function($scope, $state, HoseData) {
+.controller('SearchCtrl', function($scope, $state, HouseData) {
   console.log("SearchCtrl...");
   
   /*$scope.slider = {};
@@ -124,11 +124,15 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       
   });*/
 
+  $scope.filter = {};
+
   $scope.search = function(filter) {
     if (filter.isShowMap) {
+      console.log("ir a map");
       $state.go('app.searchResultMap'); 
     } 
     else{
+      console.log("ir a lista");
       $state.go('app.searchResultList'); 
     };
     
@@ -136,16 +140,76 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   
 })
 
-.controller('SearchResultListCtrl', function($scope, $stateParams, $rootScope, HoseData) {
+.controller('SearchResultListCtrl', function($scope, $stateParams, $rootScope, HouseData) {
   console.log("SearchResultListCtrl....");
-  $scope.products = HoseData.all(); 
+  $scope.products = HouseData.all(); 
 
 })
 
-.controller('SearchResultMapCtrl', function($scope, $stateParams) {
-  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
-  $scope.product = $firebaseObject(ref);
+.controller('SearchResultMapCtrl', function($scope, $stateParams, $firebaseObject, HouseData) {
+  console.log("SearchResultMapCtrl....");
+  var products = HouseData.all();
 
+  //var myLatlng = new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude);
+  /*var mapOptions = {
+        center: myLatlng,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);*/
+
+  for (var i=0; i < products.length; i++){
+    
+    
+    if (i==0) {
+      
+      var myLatlng = new google.maps.LatLng(products[i].location.latitude, products[i].location.longitude);
+      
+      var mapOptions = {
+            center: myLatlng,
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    }
+    
+    var position = new google.maps.LatLng(products[i].location.latitude, products[i].location.longitude);
+
+    var marker = new google.maps.Marker({
+      position: position,
+      map: map,
+      clickable: true
+    });
+
+    marker.setTitle((i + 1).toString());
+
+    var contentString = [];
+    
+    contentString[i] = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Precio: '+ products[i].price +'</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>'+ products[i].houseType + ' en ' + products[i].leaseType +'</b>' +
+      ', '+      
+      products[i].description +
+      '</p>'+
+      '</div>'+
+      '</div>';
+
+    console.log(products[i].price);
+
+
+
+    marker.info = new google.maps.InfoWindow({
+      content: contentString[i]
+    }); 
+
+    google.maps.event.addListener(marker, 'click', function() {
+      marker.info.open(this.get('map'), this);
+    });
+
+  }
 })
 
 .controller('HomeDetailCtrl', function($scope, $stateParams, $firebaseObject) {
@@ -153,8 +217,6 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
   console.log($scope.product);
-
-  
 
   $scope.allImages = $scope.product.image['img300x400'];
 
