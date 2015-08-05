@@ -159,10 +159,8 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);*/
 
   for (var i=0; i < products.length; i++){
-    
-    
-    if (i==0) {
-      
+        
+    if (i==0) {      
       var myLatlng = new google.maps.LatLng(products[i].location.latitude, products[i].location.longitude);
       
       var mapOptions = {
@@ -181,34 +179,33 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       clickable: true
     });
 
-    marker.setTitle((i + 1).toString());
+    map.setCenter(marker.getPosition);
 
-    var contentString = [];
-    
-    contentString[i] = '<div id="content">'+
+    //marker.setTitle((i + 1).toString());
+
+    var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
+      '</div>'+      
+      '<h3 id="firstHeading" class="firstHeading">'+ products[i].houseType + ' en ' + products[i].leaseType +': '+ products[i].price +'</h3>'+
+      '<div id="contentImage" class="contentImage">'+
+        '<a href="#/app/homeDetail/"'+products[i].$id+'><img src='+ products[i].image['img300x400'][0].url +' title="San Juan Morro" /></a>'+        
       '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Precio: '+ products[i].price +'</h1>'+
       '<div id="bodyContent">'+
-      '<p><b>'+ products[i].houseType + ' en ' + products[i].leaseType +'</b>' +
-      ', '+      
-      products[i].description +
-      '</p>'+
+      //'<p><b>'+ products[i].houseType + ' en ' + products[i].leaseType +'</b>' +
+      //', '+ " " +
+      //'</p>'+
       '</div>'+
       '</div>';
 
-    console.log(products[i].price);
+    var infowindow = new google.maps.InfoWindow(); 
 
-
-
-    marker.info = new google.maps.InfoWindow({
-      content: contentString[i]
-    }); 
-
-    google.maps.event.addListener(marker, 'click', function() {
-      marker.info.open(this.get('map'), this);
-    });
-
+    google.maps.event.addListener(marker, 'click', (function(marker, contentString, infowindow) {
+      return function(){
+        infowindow.setContent(contentString);
+        infowindow.open(map,marker);
+      };
+      
+    }) (marker, contentString, infowindow));
   }
 })
 
@@ -218,7 +215,7 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   $scope.product = $firebaseObject(ref);
   console.log($scope.product);
 
-  $scope.allImages = $scope.product.image['img300x400'];
+  //$scope.allImages = $scope.product.image['img300x400'];
 
   /*[{
     src: 'img/pic1.jpg'
