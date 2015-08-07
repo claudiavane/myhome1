@@ -3,22 +3,26 @@
   <div>
   	<label class="item item-input item-select">
         <span class="input-label">Ciudad</span>
-        <select ng-model="filter.city" class="select select-assertive">
-          <option>La Paz</option>
-          <option selected>Cochabamba</option>
+        <select ng-model="filter.city" class="select select-assertive" ng-change="loadZones(filter)">
+          <!--<option ng-selected="selected" >Cochabamba</option>          
+          <option>Cobija</option>
+          <option>La Paz</option>                    
           <option>Oruro</option>
-          <option>Santa Cruz</option>
           <option>Potosi</option>
+          <option>Santa Cruz</option>
+          <option>Sucre</option>
           <option>Tarija</option>
-          <option>Beni</option>
-          <option>Pando</option>
+          <option>Trinidad</option>-->
+          <option ng-repeat="i in cities" value="{{i.id}}" >
+             {{i.name}}
+          </option>
         </select>
       </label>
 
       <label class="item item-input item-select">
         <div class="input-label">Zona</div>
         <select ng-model="filter.zone">
-          <option selected>Todas</option>
+          <!--<option ng-selected="selected">Todas</option>
           <option>Queru Queru</option>
           <option>Tiquipaya</option>
           <option>Chillimarca</option>
@@ -29,14 +33,17 @@
           <option>Chimba</option>
           <option>Pacata</option>
           <option>Quintanilla</option>
-          <option>Sacaba</option>
+          <option>Sacaba</option>-->
+          <option ng-repeat="j in zones" value="{{j.id}}">
+             {{j.name}}
+          </option>
         </select>
       </label>
 
       <label class="item item-input item-select">
         <span class="input-label">Tipo Inmueble</span>
         <select ng-model="filter.houseType">
-          <option selected>Casa</option>
+          <option ng-selected="selected">Casa</option>
           <option>Terreno</option>
           <option>Edificio</option>
           <option>Oficina</option>
@@ -47,7 +54,7 @@
       
 		  <li class="item item-checkbox">
 		     <label class="checkbox checkbox-assertive">
-		       <input type="checkbox" ng-model="filter.leaseSaleType">
+		       <input type="checkbox" ng-model="filter.leaseSaleType" ng-selected="selected">
 		     </label>
 		     Venta
 		  </li>
@@ -65,12 +72,12 @@
 		  </li>
 	  
   	  <label class="item item-input">
-  		  <span class="input-label">Precio Min.</span>
-  		  <input type="number" ng-model="filter.minPrice">
+  		  <span class="input-label">Precio Min. ($us.)</span>
+  		  <input type="number" ng-model="filter.minPrice" value="20000">
   	  </label>
   	  <label class="item item-input">
-  		  <span class="input-label">Precio Max.</span>
-  		  <input type="number" ng-model="filter.maxPrice">
+  		  <span class="input-label">Precio Max. ($us.)</span>
+  		  <input type="number" ng-model="filter.maxPrice" value="150000">
   	  </label>
     <!--<div>      
       <div class="item range range-assertive">

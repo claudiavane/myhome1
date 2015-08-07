@@ -112,17 +112,24 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 })
 
-.controller('SearchCtrl', function($scope, $rootScope, $state, HouseData) {
+.controller('SearchCtrl', function($scope, $rootScope, $state, HouseData, Cities, Zones) {
   console.log("SearchCtrl...");
-  
-  $scope.filter = {};
+
+  $scope.filter = {city: "0", zone: "0", houseType: "Casa", leaseSaleType:true, minPrice: 20000, maxPrice: 150000};
+  $scope.cities = Cities.all();
+  $scope.zones = Zones.all();//Zones.getZonesByCity($scope.filter.city); 
+
+  $scope.loadZones = function(filter) {
+    console.log("cargo zonas");
+    $scope.zones = Zones.getZonesByCity(filter.city);       
+  }
+
 
   $scope.search = function(filter) {
     $rootScope.filter = filter;
     console.log(filter.city);
     if (filter.isShowMap) {
-      $state.go('app.searchResultMap', {filter: filter.city}); 
-          
+      $state.go('app.searchResultMap', {filter: filter.city});           
     } 
     else{
       $state.go('app.searchResultList', {filter: filter.city}); 
@@ -131,11 +138,13 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   
 })
 
-.controller('SearchResultListCtrl', function($scope, $state, $stateParams, $rootScope, HouseData) {
+.controller('SearchResultListCtrl', function($scope, $state, $stateParams, $rootScope, $firebaseArray, HouseData) {
   console.log("SearchResultListCtrl....");
   //$scope.products = HouseData.all(); 
-  console.log($rootScope.filter.city);
+
   $scope.products = HouseData.getHouses($rootScope.filter);
+
+  //$scope.products = HouseData.getHouses($rootScope.filter);
 
   $scope.goSearchResultMap = function() {
       console.log("ir a map");

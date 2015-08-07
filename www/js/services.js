@@ -1,6 +1,171 @@
-angular.module('starter.services', ['firebase'])
+angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core'])
 
-.factory('HouseData', function ($firebase, $firebaseArray, $q) {
+.factory('Cities', function() {
+  
+  var cities = [{
+    id: 0,
+    name: 'Cochabamba'
+  }, {
+    id: 1,
+    name: 'Cobija'
+  },{
+    id: 2,
+    name: 'La Paz'
+  }, {
+    id: 3,
+    name: 'Oruro'
+  }, {
+    id: 4,
+    name: 'Potosi'
+  }, {
+    id: 5,
+    name: 'Santa Cruz'
+  }, {
+    id: 6,
+    name: 'Sucre'
+  }, {
+    id: 7,
+    name: 'Tarija'
+  }, {
+    id: 8,
+    name: 'Trinidad'
+  }];
+
+  return {
+    all: function() {
+      return cities;
+    },
+    remove: function(city) {
+      cities.splice(cities.indexOf(city), 1);
+    },
+    get: function(cityId) {
+      for (var i = 0; i < cities.length; i++) {
+        if (cities[i].id === parseInt(cityId)) {
+          return cities[i];
+        }
+      }
+      return null;
+    }
+  };
+})
+
+.factory('Zones', function() {
+  
+  var zones = [{
+    id: 0,
+    name: 'Todas',
+    cityId: 0
+  }, {
+    id: 1,
+    name: 'Alalay',
+    cityId: 0
+  },{
+    id: 2,
+    name: 'Cala Cala',
+    cityId: 0
+  },{
+    id: 3,
+    name: 'Colcapirhua',
+    cityId: 0
+  }, {
+    id: 4,
+    name: 'Jayhuayco',
+    cityId: 0
+  }, {
+    id: 5,
+    name: 'La Chimba',
+    cityId: 0
+  }, {
+    id: 6,
+    name: 'Las Cuadras',
+    cityId: 0
+  }, {
+    id: 7,
+    name: 'Mayorazgo',
+    cityId: 0
+  }, {
+    id: 8,
+    name: 'Muyurina',
+    cityId: 0
+  }, {
+    id: 9,
+    name: 'Noroeste',
+    cityId: 0
+  }, {
+    id: 10,
+    name: 'Pacata',
+    cityId: 0
+  }, {
+    id: 11,
+    name: 'Queru Queru',
+    cityId: 0
+  }, {
+    id: 12,
+    name: 'Quilacollo',
+    cityId: 0
+  }, {
+    id: 13,
+    name: 'Sacaba',
+    cityId: 0
+  }, {
+    id: 14,
+    name: 'San Pedro',
+    cityId: 0
+  }, {
+    id: 15,
+    name: 'Sarco',
+    cityId: 0
+  }, {
+    id: 16,
+    name: 'Sudoeste',
+    cityId: 0
+  }, {
+    id: 17,
+    name: 'Temporal',
+    cityId: 0
+  }, {
+    id: 18,
+    name: 'Tiquipaya',
+    cityId: 0
+  }, {
+    id: 19,
+    name: 'Ushpa Ushpa',
+    cityId: 0
+  }, {
+    id: 20,
+    name: 'Villa Bush',
+    cityId: 0
+  }];
+
+  return {
+    all: function() {
+      return zones;
+    },
+    remove: function(zone) {
+      zones.splice(zones.indexOf(zone), 1);
+    },
+    get: function(zoneId) {
+      for (var i = 0; i < zones.length; i++) {
+        if (zones[i].id === parseInt(zoneId)) {
+          return zones[i];
+        }
+      }
+      return null;
+    },
+    getZonesByCity: function(cityId) {
+      var zonesCity = {};
+      for (var i = 0; i < zones.length; i++) {
+        if (zones[i].cityId === parseInt(cityId)) {
+          zonesCity = zones[i];
+          //return zones[i];
+        }
+      }
+      return zonesCity;
+    }
+  };
+})
+
+.factory('HouseData', function ($firebase, $firebaseArray) {
 
     var ref = new Firebase(firebaseUrl);
     var products = $firebaseArray(ref);
@@ -30,18 +195,11 @@ angular.module('starter.services', ['firebase'])
 
         getHouses: function (filter) {
             console.log("services...");
-            var deferred = $q.defer();
-            var resultQuery = ref.orderByChild("city").equalTo(filter.city).on("child_added", function(snapshot) {
-              console.log(snapshot.key());
-              deferred.resolve(snapshot.val());
-            });
-            
-            /*var usersRef = ref.orderByChild("city").equalTo(filter.city);
-            usersRef.on("child_added", function (snap) {
-                console.log(snap.key());
-                deferred.resolve(snap.val());
-            });*/
-            return deferred.promise;
+            //var deferred = $q.defer();
+            var query = ref.orderByChild("city").equalTo(filter.city);
+
+            var result = $firebaseArray(query);
+            return result;
         },
         getProducts: function (filter) {
             console.log("services...");
