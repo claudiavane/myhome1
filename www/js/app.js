@@ -107,11 +107,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.searchResultList', {
-    url: '/searchResultList',
+    url: '/searchResultList/:filter',
     views: {
       'menuContent': {
         templateUrl: 'templates/searchResultList.html',
         controller: 'SearchResultListCtrl'
+      }
+    }
+  })
+
+  .state('app.searchResultMap', {
+    url: '/searchResultMap/:filter',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/searchResultMap.html',
+        controller: 'SearchResultMapCtrl'
       }
     }
   })
@@ -145,16 +155,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })  
-
-  .state('app.searchResultMap', {
-    url: '/searchResultMap',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/searchResultMap.html',
-        controller: 'SearchResultMapCtrl'
-      }
-    }
-  })
 
   .state('app.publishList', {
     url: '/publishList',

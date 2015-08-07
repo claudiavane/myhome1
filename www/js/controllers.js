@@ -112,51 +112,43 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 })
 
-.controller('SearchCtrl', function($scope, $state, HouseData) {
+.controller('SearchCtrl', function($scope, $rootScope, $state, HouseData) {
   console.log("SearchCtrl...");
   
-  /*$scope.slider = {};
-  $scope.slider.price = 200000;
-    
-  $scope.$watch('slider.price',function(val,old){
-     $scope.slider.price = parseInt(val);
-     console.log('range=' + $scope.slider.price)
-      
-  });*/
-
   $scope.filter = {};
 
   $scope.search = function(filter) {
+    $rootScope.filter = filter;
+    console.log(filter.city);
     if (filter.isShowMap) {
-      console.log("ir a map");
-      $state.go('app.searchResultMap'); 
+      $state.go('app.searchResultMap', {filter: filter.city}); 
+          
     } 
     else{
-      console.log("ir a lista");
-      $state.go('app.searchResultList'); 
-    };
-    
+      $state.go('app.searchResultList', {filter: filter.city}); 
+    };        
   }
   
 })
 
-.controller('SearchResultListCtrl', function($scope, $stateParams, $rootScope, HouseData) {
+.controller('SearchResultListCtrl', function($scope, $state, $stateParams, $rootScope, HouseData) {
   console.log("SearchResultListCtrl....");
-  $scope.products = HouseData.all(); 
+  //$scope.products = HouseData.all(); 
+  console.log($rootScope.filter.city);
+  $scope.products = HouseData.getHouses($rootScope.filter);
+
+  $scope.goSearchResultMap = function() {
+      console.log("ir a map");
+      $state.go('app.searchResultMap');     
+  }
 
 })
 
-.controller('SearchResultMapCtrl', function($scope, $stateParams, $firebaseObject, HouseData) {
+.controller('SearchResultMapCtrl', function($scope, $state, $stateParams, $firebaseObject, HouseData) {
   console.log("SearchResultMapCtrl....");
-  var products = HouseData.all();
-
-  //var myLatlng = new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude);
-  /*var mapOptions = {
-        center: myLatlng,
-        zoom: 16,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var map = new google.maps.Map(document.getElementById("map"), mapOptions);*/
+  //var products = HouseData.all();
+  console.log($stateParams.filter);
+  var products = HouseData.getProducts($stateParams.filter);
 
   for (var i=0; i < products.length; i++){
         
@@ -181,19 +173,17 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
     map.setCenter(marker.getPosition);
 
-    //marker.setTitle((i + 1).toString());
-
     var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+      
-      '<h3 id="firstHeading" class="firstHeading">'+ products[i].houseType + ' en ' + products[i].leaseType +': '+ products[i].price +'</h3>'+
-      '<div id="contentImage" class="contentImage">'+
-        '<a href="#/app/homeDetail/"'+products[i].$id+'><img src='+ products[i].image['img300x400'][0].url +' title="San Juan Morro" /></a>'+        
-      '</div>'+
+      '<h2 id="firstHeading" class="firstHeading">'+ products[i].houseType + ' en ' + products[i].leaseType +'</h2>'+
       '<div id="bodyContent">'+
-      //'<p><b>'+ products[i].houseType + ' en ' + products[i].leaseType +'</b>' +
+      '<p><b>Precio: '+ products[i].price +'</b>' +
       //', '+ " " +
-      //'</p>'+
+      '</p>'+
+      '</div>'+
+      '<div id="contentImage" class="contentImage">'+
+      '<a href="#/app/homeDetail/'+products[i].$id+'"><img src='+ products[i].image['img300x400'][0].url +'/></a>'+        
       '</div>'+
       '</div>';
 
@@ -207,10 +197,16 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       
     }) (marker, contentString, infowindow));
   }
+
+  $scope.goSearchResultList = function() {
+      console.log("ir a list");
+      $state.go('app.searchResultList');     
+  }
 })
 
 .controller('HomeDetailCtrl', function($scope, $stateParams, $firebaseObject) {
   console.log("HomeDetailCtrl...");
+
   var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
   console.log($scope.product);
@@ -281,18 +277,18 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   
 })
 
-.controller('PublishListCtrl', function($scope, $rootScope, HoseData, $firebaseArray) {
+.controller('PublishListCtrl', function($scope, $rootScope, HouseData, $firebaseArray) {
   console.log("PublishListCtrl...");
-  $scope.products = HoseData.all();  
+  $scope.products = HouseData.all();  
 
   $scope.remove = function (product) {
-        HoseData.remove(product);
+        HouseData.remove(product);
   }
   $scope.edit = function (product) {
-        HoseData.remove(product);
+        HouseData.remove(product);
   }
   $scope.setIsSold = function (product) {
-        HoseData.updateIsSold(product);
+        HouseData.updateIsSold(product);
   }
 })
 
