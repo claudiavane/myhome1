@@ -115,24 +115,24 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 .controller('SearchCtrl', function($scope, $rootScope, $state, HouseData, Cities, Zones) {
   console.log("SearchCtrl...");
 
-  $scope.filter = {city: "0", zone: "0", houseType: "Casa", leaseSaleType:true, minPrice: 20000, maxPrice: 150000};
+  $scope.filter = {cityId: "0", zoneId: "0", houseType: "Casa", leaseSaleType:true, minPrice: 20000, maxPrice: 150000};
   $scope.cities = Cities.all();
   $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
 
 
   $scope.loadZones = function(filter) {
-    $scope.zones = Zones.getZonesByCity(filter.city);       
+    $scope.zones = Zones.getZonesByCity(filter.cityId);       
   }
 
 
   $scope.search = function(filter) {
     $rootScope.filter = filter;
-    console.log(filter.city);
+    console.log(filter.cityId);
     if (filter.isShowMap) {
-      $state.go('app.searchResultMap', {filter: filter.city});           
+      $state.go('app.searchResultMap', {filter: filter.cityId});           
     } 
     else{
-      $state.go('app.searchResultList', {filter: filter.city}); 
+      $state.go('app.searchResultList', {filter: filter.cityId}); 
     };        
   }
   

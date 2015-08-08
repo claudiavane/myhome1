@@ -157,7 +157,7 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
 
       for (var i = 0; i < zones.length; i++) {
         if (zones[i].cityId === parseInt(cityId)) {
-          zonesCity
+          
           zonesCity.push(zones[i]);
         }
       }
@@ -167,7 +167,7 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
   };
 })
 
-.factory('HouseData', function ($firebase, $firebaseArray) {
+.factory('HouseData', function ($firebase, $firebaseArray, Cities, Zones) {
 
     var ref = new Firebase(firebaseUrl);
     var products = $firebaseArray(ref);
@@ -196,27 +196,34 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
         },
 
         getHouses: function (filter) {
-            console.log("services...");
+            console.log("search services...");
             
-            //https://www.firebase.com/docs/web/libraries/angular/guide/synchronized-arrays.html
-            var query = ref.orderByChild("city").equalTo(filter.city)
-                        .orderByChild('zone').equalTo(filter.zone)
-                        .orderByChild('houseType').equalTo(filter.houseType)
-                        .orderByChild('houseType').equalTo(filter.houseType);
+            var city = Cities.get(filter.cityId);
+            var zone = Zones.get(filter.zoneId);
+
+            var queryCity;
+            var queryZone;
+                        
+            var query = ref.orderByChild("city").equalTo(city.name);
+            
+            // Esta seccion de codigo en la variable query si recupera lo que deberia sin embaro al momento de utilizar $firebaseArray(query) da error.
+            /*query.on("child_added", function(snapshotCity){
+              console.log(snapshotCity.key() + " su ciudad es " + snapshotCity.val().city);
+              
+              //console.log(snapshotCity.key() + " su zona es " + snapshotCity.val().zone);
+              if (parseInt(filter.zoneId) === 0) {
+                  query = snapshotCity.val();
+              }else{              
+                if (snapshotCity.val().zone ===  zone.name) {
+                    console.log(snapshotCity.key() + " su zona es " + snapshotCity.val().zone);
+                    query = snapshotCity.val();
+                }
+              }
+            });*/
 
             var result = $firebaseArray(query);
+
             return result;
-        },
-        getProducts: function (filter) {
-            console.log("services...");
-            var resultQuery = ref.orderByChild("city").equalTo(filter.city).on("child_added", function(snapshot) {
-              console.log(snapshot.key());
-            });
-            for (var i = 0; i < resultQuery.length; i++) {
-                console.log(products[i].id);                
-            }
-            
-            return resultQuery;
         }        
     }
 })
