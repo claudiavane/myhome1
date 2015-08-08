@@ -230,9 +230,9 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
               }
             });*/
 
-            var result = $firebaseArray(query);
-
-            return result;
+            products = $firebaseArray(query);
+            
+            return products;
         }        
     }
 })

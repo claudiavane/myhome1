@@ -129,10 +129,10 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
     $rootScope.filter = filter;
     console.log(filter.cityId);
     if (filter.isShowMap) {
-      $state.go('app.searchResultMap', {filter: filter.cityId});           
+      $state.go('app.searchResultMap');           
     } 
     else{
-      $state.go('app.searchResultList', {filter: filter.cityId}); 
+      $state.go('app.searchResultList'); 
     };        
   }
   
@@ -140,10 +140,9 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 .controller('SearchResultListCtrl', function($scope, $state, $stateParams, $rootScope, $firebaseArray, HouseData) {
   console.log("SearchResultListCtrl....");
-  //$scope.products = HouseData.all(); 
 
-  $scope.products = HouseData.getHouses($rootScope.filter);
-  
+  console.log($rootScope.filter.cityId);
+  $scope.products = HouseData.getHouses($rootScope.filter);  
   $scope.titleResult = HouseData.getCount() + " Resultados encontrados";
 
   $scope.goSearchResultMap = function() {
@@ -155,17 +154,16 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 .controller('SearchResultMapCtrl', function($scope, $state, $stateParams, $rootScope, $firebaseObject, HouseData) {
   console.log("SearchResultMapCtrl....");
-  //var products = HouseData.all();  
-  //var products = HouseData.getProducts($stateParams.filter);
-  var products = HouseData.getHouses($rootScope.filter);
+  var products = HouseData.all();    
+  //var products = HouseData.getHouses($rootScope.filter);
 
   $scope.titleResult = HouseData.getCount() + " Resultados encontrados";
 
   for (var i=0; i < products.length; i++){
-        
+    console.log("holaa ");
     if (i==0) {      
       var myLatlng = new google.maps.LatLng(products[i].location.latitude, products[i].location.longitude);
-      
+      console.log("mi lat es " + products[i].location.latitude);
       var mapOptions = {
             center: myLatlng,
             zoom: 12,

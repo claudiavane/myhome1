@@ -107,7 +107,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.searchResultList', {
-    url: '/searchResultList/:filter',
+    url: '/searchResultList',
     views: {
       'menuContent': {
         templateUrl: 'templates/searchResultList.html',
@@ -117,7 +117,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('app.searchResultMap', {
-    url: '/searchResultMap/:filter',
+    url: '/searchResultMap',
     views: {
       'menuContent': {
         templateUrl: 'templates/searchResultMap.html',
