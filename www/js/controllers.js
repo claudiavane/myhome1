@@ -117,10 +117,10 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
   $scope.filter = {city: "0", zone: "0", houseType: "Casa", leaseSaleType:true, minPrice: 20000, maxPrice: 150000};
   $scope.cities = Cities.all();
-  $scope.zones = Zones.all();//Zones.getZonesByCity($scope.filter.city); 
+  $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
+
 
   $scope.loadZones = function(filter) {
-    console.log("cargo zonas");
     $scope.zones = Zones.getZonesByCity(filter.city);       
   }
 
