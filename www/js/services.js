@@ -153,13 +153,15 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
       return null;
     },
     getZonesByCity: function(cityId) {
-      var zonesCity = {};
+      var zonesCity=[{}];
+
       for (var i = 0; i < zones.length; i++) {
         if (zones[i].cityId === parseInt(cityId)) {
-          zonesCity = zones[i];
-          //return zones[i];
+          zonesCity
+          zonesCity.push(zones[i]);
         }
       }
+
       return zonesCity;
     }
   };
@@ -195,8 +197,12 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
 
         getHouses: function (filter) {
             console.log("services...");
-            //var deferred = $q.defer();
-            var query = ref.orderByChild("city").equalTo(filter.city);
+            
+            //https://www.firebase.com/docs/web/libraries/angular/guide/synchronized-arrays.html
+            var query = ref.orderByChild("city").equalTo(filter.city)
+                        .orderByChild('zone').equalTo(filter.zone)
+                        .orderByChild('houseType').equalTo(filter.houseType)
+                        .orderByChild('houseType').equalTo(filter.houseType);
 
             var result = $firebaseArray(query);
             return result;
