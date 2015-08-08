@@ -143,8 +143,8 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   //$scope.products = HouseData.all(); 
 
   $scope.products = HouseData.getHouses($rootScope.filter);
-
-  //$scope.products = HouseData.getHouses($rootScope.filter);
+  
+  $scope.titleResult = HouseData.getCount() + " Resultados encontrados";
 
   $scope.goSearchResultMap = function() {
       console.log("ir a map");
@@ -153,11 +153,13 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 })
 
-.controller('SearchResultMapCtrl', function($scope, $state, $stateParams, $firebaseObject, HouseData) {
+.controller('SearchResultMapCtrl', function($scope, $state, $stateParams, $rootScope, $firebaseObject, HouseData) {
   console.log("SearchResultMapCtrl....");
-  //var products = HouseData.all();
-  console.log($stateParams.filter);
-  var products = HouseData.getProducts($stateParams.filter);
+  //var products = HouseData.all();  
+  //var products = HouseData.getProducts($stateParams.filter);
+  var products = HouseData.getHouses($rootScope.filter);
+
+  $scope.titleResult = HouseData.getCount() + " Resultados encontrados";
 
   for (var i=0; i < products.length; i++){
         

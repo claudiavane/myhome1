@@ -1,5 +1,6 @@
 
-<ion-view view-title="3 Inmuebles Encontrados" >
+<ion-view view-title="{{titleResult}}">
+
   <ion-nav-buttons side="right">
       <a class="button button-icon button-clear ion-location" href="#/app/searchResultMap"></a>
       <!--<button class="button button-icon button-clear ion-android-add" href="#/app/browse">
@@ -17,6 +18,7 @@
         <p>{{product.description}}</p>
         <p>{{product.zone}}</p>        
         <p>{{product.price}}</p>
+
         <!--<i class="icon ion-ios-telephone-outline"></i>-->
         <span class="badge badge-assertive" ng-show="product.isSold == '0'">Vendido</span>
       </ion-item>

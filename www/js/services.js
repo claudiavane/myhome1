@@ -171,6 +171,7 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
 
     var ref = new Firebase(firebaseUrl);
     var products = $firebaseArray(ref);
+    var count = 0;
 
     return {
         all: function () {
@@ -195,6 +196,10 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
             return null;
         },
 
+        getCount: function () {
+            return count;
+        },
+
         getHouses: function (filter) {
             console.log("search services...");
             
@@ -205,6 +210,10 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
             var queryZone;
                         
             var query = ref.orderByChild("city").equalTo(city.name);
+            count = 0;
+            query.on("child_added", function(snapshotCity){
+              count++;
+            });
             
             // Esta seccion de codigo en la variable query si recupera lo que deberia sin embaro al momento de utilizar $firebaseArray(query) da error.
             /*query.on("child_added", function(snapshotCity){
