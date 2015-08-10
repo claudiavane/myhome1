@@ -378,11 +378,12 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
         if ($stateParams.productId) {
           console.log("update: " + $stateParams.productId);
           console.log("city: " + $scope.product.city);
+          console.log("zone: " + $scope.product.zone);
           console.log("description: " + $scope.product.description);
           console.log("contact.email: " + $scope.product.contact.email);
           console.log("contact.name: " + $scope.product.contact.name);
           console.log("contact.phone: " + $scope.product.contact.phone);
-          console.log("contact.phone: " + $scope.product.contact.phone);
+          console.log("houseType: " + $scope.product.contact.phone);
 
           var productRef =  $scope.refire.set($scope.product);
         }else{ // es create
