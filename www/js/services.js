@@ -174,10 +174,11 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
     var count = 0;
 
     return {
-        all: function () {
+        all: function () {            
             return products;
         },
         remove: function (product) {
+            console.log("services... " + product.$id);
             products.$remove(product).then(function (ref) {
                 ref.key() === product.$id; // true item has been removed
             });
@@ -229,12 +230,36 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
                 }
               }
             });*/
-
-            products = $firebaseArray(query);
             
+            products = $firebaseArray(query);            
             return products;
         }        
     }
+})
+
+.factory('Publish', function($firebase, $firebaseArray) {
+  var ref = new Firebase(firebaseUrl);  
+  var publish;
+
+  return {
+    getPublish: function(userId) {
+      console.log("Service... el user es " + userId);
+      var query = ref.orderByChild("userId").equalTo(userId);
+      publish = $firebaseArray(query);
+      return publish;
+    },    
+    remove: function(city) {
+      cities.splice(cities.indexOf(city), 1);
+    },
+    get: function(cityId) {
+      for (var i = 0; i < cities.length; i++) {
+        if (cities[i].id === parseInt(cityId)) {
+          return cities[i];
+        }
+      }
+      return null;
+    }
+  };
 })
 
 .factory('$localstorage', ['$window', function($window) {

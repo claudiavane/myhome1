@@ -33,9 +33,10 @@
           </ion-scroll>
         </a>-->
         <p><b>{{product.city}}: </b>{{product.zone}}</p>
-        <p><b>Precio: </b>{{product.price}}</p>
-        <p><b>Superficie: </b>{{product.surface}}</p>
-        <p><b>Sup. Construida: </b>{{product.surfaceBuild}}</p>
+        <p><b>Precio: </b>{{product.price}} $us.</p>
+        <p><b>Se acepta financiamiento bancario? </b><span ng-show="product.isBanckCredit">Si</span><span ng-show="!product.isBanckCredit">No</span></p>
+        <p><b>Superficie: </b>{{product.surface}} m2.</p>
+        <p><b>Sup. Construida: </b>{{product.surfaceBuild}} m2.</p>
         <p><b>Descripcion: </b>{{product.description}}</p>
         <p>
           <!--<a href="#" class="button icon-left ion-star button-clear button-dark">Agregar a favoritos</a> 

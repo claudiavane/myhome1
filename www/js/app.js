@@ -1,4 +1,4 @@
-var firebaseUrl = "https://sweltering-inferno-1375.firebaseio.com";
+var firebaseUrl = "https://sweltering-inferno-1375.firebaseio.com/inmuebles";
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -9,23 +9,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .run(function($ionicPlatform, $ionicLoading, $rootScope, $ionicLoading, $window, $localstorage) {
   $ionicPlatform.ready(function() {
+    console.log("app...");
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      //cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
 
-    $rootScope.token = null;
-    $rootScope.refirebase = new Firebase("https://shining-inferno-7335.firebaseio.com");
     $rootScope.firebaseUrl = firebaseUrl;
-    console.log($rootScope.firebaseUrl);
-
+    $rootScope.refirebase = new Firebase("https://sweltering-inferno-1375.firebaseio.com");
+    $rootScope.userId = null;
+    $rootScope.token = null;
+    $rootScope.latitude = -17.37;
+    $rootScope.longitude = -66.15;
+    
     $rootScope.show = function(text) {
       $rootScope.loading = $ionicLoading.show({
         template: text ? text : 'Loading..',
@@ -70,7 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $rootScope.refirebase.authWithCustomToken(token, $rootScope.authHandler);
       }
     }
-    $rootScope.userSignedIn = function(){
+    $rootScope.userSignedIn = function(){        
         return($rootScope.token != null)
     }
     $rootScope.checkSession = function() {
@@ -89,7 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -166,6 +167,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('app.prePublish', {
+    url: '/prePublish',
+    views: {
+      'menuContent': {
+        controller: 'PrePublishCtrl'
+      }
+    }
+  })  
+
   .state('app.publish', {
     url: '/publish',
     views: {
@@ -206,11 +216,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.favorites', {
+      url: '/favorites',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/favorites.html',
+          controller: 'FavoritesCtrl'
+        }
+      }
+  })
+
+  .state('app.settings', {
+      url: '/settings',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/settings.html'
         }
       }
   })
@@ -222,16 +242,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           templateUrl: 'templates/help.html'
         }
       }
-  })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/search');

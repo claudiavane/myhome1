@@ -1,129 +1,142 @@
 angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.core'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
+.controller('AppCtrl', function($scope, $scope, $rootScope, $ionicModal, $timeout) {
+    console.log("AppCtrl...");
+    
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
+  
 })
 
-.controller('SignInCtrl', function($scope, $ionicModal, $state, $firebaseAuth, $stateParams, $rootScope) {
+.controller('SignInCtrl', ['$state', '$scope', '$ionicModal', '$rootScope', '$window', '$localstorage' , '$ionicUser', '$ionicHistory', 'Publish',
+  function($state, $scope, $ionicModal, $rootScope, $window, $localstorage, $ionicUser, $ionicHistory, Publish) {
   console.log("SignInCtrl....");
+    /* quita el boton back de la cabecera */
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true,
+      historyRoot: true
+    });
 
-  var ref = new Firebase($scope.firebaseUrl);
-  var auth = $firebaseAuth(ref);
-
-      //var ref = new Firebase(firebaseUrl);
-      //var products = $firebaseArray(ref);
-
-  $ionicModal.fromTemplateUrl('templates/sign-up.html', {
+    $scope.user = {
+        email: "",
+        password: "",
+        userId:""
+    };
+    /* abre la modal para el registro de usuario */
+    $ionicModal.fromTemplateUrl('templates/sign-up.html', {
         scope: $scope
-  }).then(function (modal) {
-      $scope.modal = modal;
-  }); 
+    }).then(function (modal) {
+        $scope.modal = modal;
+    });   
 
-  $scope.createUser = function (user) {
-      console.log("Create User Function called");
-      if (user && user.email && user.password && user.displayname) {
-          $ionicLoading.show({
-              template: 'Registrando...'
+    $scope.createUser = function () {
+      
+      if (!$scope.user.email || !$scope.user.password) {
+        $rootScope.notify("Por favor llene los todos los datos");
+        return false;
+      }
+      $rootScope.show('Registrando... Espere un momento por favor');
+      console.log($scope.user.email);
+      $rootScope.refirebase.createUser($scope.user, function (error, user) {
+        console.log("Creandoo...");
+        if (!error) {          
+          $rootScope.hide();
+          console.log("Este valor es " + user.uid);
+          var newUserId = user.uid.slice(-1);
+
+          $rootScope.refirebase.child("users").child(user.uid).set({
+            provider: 'password',
+            email: $scope.user.email,
+            userId : newUserId
           });
 
-          auth.$createUser({
-              email: user.email,
-              password: user.password
-          }).then(function (userData) {
-              alert("Usuario creado");
-              ref.child("users").child(userData.uid).set({
-                  email: user.email,
-                  displayName: user.displayname
-              });
-              $ionicLoading.hide();
-              $scope.modal.hide();
-          }).catch(function (error) {
-              alert("Error: " + error);
-              $ionicLoading.hide();
-          });
-      } else
-          alert("Por favor llene todos los datos");
+          //$rootScope.token = user.token;
+          //$window.location.href = ('#/');          
+          $scope.modal.hide();
+        }
+        else {
+          $rootScope.hide();
+          if (error.code == 'INVALID_EMAIL') {
+            $rootScope.notify('Direccion de correo inválido');
+          }
+          else if (error.code == 'EMAIL_TAKEN') {
+            $rootScope.notify('El correo ya esta siendo utilizado');
+          }
+          else {
+            $rootScope.notify('Ha ocurrido un error. Por favor intente despues');
+          }
+        }
+      });
+    }
+    /* login user */
+    $scope.validateUser = function () {
+        $rootScope.show('Ingresando... Espere un momento por favor');
+        var email = this.user.email;
+        var password = this.user.password;
+        if (!email || !password) {
+           $rootScope.notify("Por favor llene los todos los datos");
+           return false;
+        }
+        function authHandler(error, authData) {
+          if (error) {
+                $rootScope.hide();
+                if (error.code == 'INVALID_EMAIL') {
+                  $rootScope.notify('Direccion de correo inválido');
+                }
+                else if (error.code == 'INVALID_PASSWORD') {
+                  $rootScope.notify('Contraseña invalida');
+                }
+                else if (error.code == 'INVALID_USER') {
+                  $rootScope.notify('Usuario invalido');
+                }
+                else {
+                  $rootScope.notify('Ha ocurrido un error. Por favor intente despues');
+                }
+              }
+            else {
+              $rootScope.hide();
+              console.log(authData);
+              $rootScope.token = authData.token;
+              $localstorage.set('token', authData.token);
+              
+              $ionicUser.identify({
+                user_id: authData.uid,
+                email: email              
+              }).then(function() {
+                console.log("Success identify User");
+              }, function(err) {
+                  console.log("Error identify User");
+                  console.log(err);
+              });;
+
+              var userId = authData.uid.slice(-1);
+              //$state.go('app.publishList');
+              $rootScope.userId = userId;
+              $window.location.href = ('#/app/publishList');
+          }
+        }
+        $rootScope.refirebase.authWithPassword({
+          email    : email,
+          password : password
+        }, authHandler);
+     }
   }
-
-  $scope.signIn = function (user) {
-
-      if (user && user.email && user.pwdForLogin) {
-          $ionicLoading.show({
-              template: 'Signing In...'
-          });
-          auth.$authWithPassword({
-              email: user.email,
-              password: user.pwdForLogin
-          }).then(function (authData) {
-              console.log("Logged in as:" + authData.uid);
-              ref.child("users").child(authData.uid).once('value', function (snapshot) {
-                  var val = snapshot.val();
-                  // To Update AngularJS $scope either use $apply or $timeout
-                  $scope.$apply(function () {
-                      $rootScope.displayName = val;
-                  });
-              });
-              $ionicLoading.hide();
-              $state.go('tab.rooms');
-          }).catch(function (error) {
-              alert("Authentication failed:" + error.message);
-              $ionicLoading.hide();
-          });
-      } else
-          alert("Please enter email and password both");
-  }
-
-})
+])
 
 .controller('SearchCtrl', function($scope, $rootScope, $state, HouseData, Cities, Zones) {
   console.log("SearchCtrl...");
 
   $scope.filter = {cityId: "0", zoneId: "0", houseType: "Casa", leaseSaleType:true, minPrice: 20000, maxPrice: 150000};
   $scope.cities = Cities.all();
-  $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
-
+  $scope.zones =  Zones.all(); 
 
   $scope.loadZones = function(filter) {
     $scope.zones = Zones.getZonesByCity(filter.cityId);       
   }
-
 
   $scope.search = function(filter) {
     $rootScope.filter = filter;
@@ -156,11 +169,9 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   console.log("SearchResultMapCtrl....");
   var products = HouseData.all();    
   //var products = HouseData.getHouses($rootScope.filter);
-
   $scope.titleResult = HouseData.getCount() + " Resultados encontrados";
 
-  for (var i=0; i < products.length; i++){
-    console.log("holaa ");
+  for (var i=0; i < products.length; i++){    
     if (i==0) {      
       var myLatlng = new google.maps.LatLng(products[i].location.latitude, products[i].location.longitude);
       console.log("mi lat es " + products[i].location.latitude);
@@ -208,7 +219,6 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   }
 
   $scope.goSearchResultList = function() {
-      console.log("ir a list");
       $state.go('app.searchResultList');     
   }
 })
@@ -216,11 +226,13 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 .controller('HomeDetailCtrl', function($scope, $stateParams, $firebaseObject) {
   console.log("HomeDetailCtrl...");
 
-  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
-  console.log($scope.product);
-
-  //$scope.allImages = $scope.product.image['img300x400'];
+  
+  /*$scope.allImages = $scope.product.image.img300x400;
+  for (var i = 0; i < scope.allImages.length; i++) {
+    console.log("Imagen " + i + ": " + scope.allImages[i].url);
+  }*/
 
   /*[{
     src: 'img/pic1.jpg'
@@ -234,7 +246,6 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
     $scope.activeSlide = index;
     $scope.showModal('templates/imageViewer.html');
   }
-
   $scope.showModal = function(templateUrl) {
     $ionicModal.fromTemplateUrl(templateUrl, {
       scope: $scope,
@@ -243,8 +254,7 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       $scope.modal = modal;
       $scope.modal.show();
     });
-  }
-  // Close the modal
+  }  
   $scope.closeModal = function() {
     $scope.modal.hide();
     $scope.modal.remove()
@@ -253,7 +263,8 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 .controller('HomeDetailLocationCtrl', function($scope, $rootScope, $stateParams, $firebaseObject) {
   console.log("HomeDetailLocationCtrl...");
-  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
+  
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles/"+$stateParams.productId);
   $scope.product = $firebaseObject(ref);
 
   $scope.product.$loaded().then(function() {
@@ -268,27 +279,46 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    console.log($scope.product.location.latitude);
-
+    
     var marker = new google.maps.Marker({
             position: new google.maps.LatLng($scope.product.location.latitude, $scope.product.location.longitude),
             map: map,
             title: $scope.product.zone
     });
-  }
+
+  };
 })
 
 .controller('HomeDetailContactCtrl', function($scope, $stateParams, $firebaseObject) {
   console.log("HomeDetailContactCtrl...");
-  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
-  $scope.product = $firebaseObject(ref);
-  console.log($scope.product);
-  
+  var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles/"+$stateParams.productId);
+  $scope.product = $firebaseObject(ref);  
 })
 
-.controller('PublishListCtrl', function($scope, $rootScope, HouseData, $firebaseArray) {
+.controller('PrePublishCtrl', function($scope, $rootScope, $state, $stateParams, HouseData, $ionicHistory) {
+  console.log("PrePublishCtrl...");
+  //hide back button
+  $ionicHistory.nextViewOptions({
+    disableAnimate: true,
+    historyRoot: true
+  });
+  if (!$rootScope.userSignedIn()){
+    $state.go('app.sign-in');
+  }else{
+    $state.go('app.publishList');
+  }  
+})
+
+.controller('PublishListCtrl', function($scope, $rootScope, $state, $stateParams, HouseData, $ionicHistory, Publish) {
   console.log("PublishListCtrl...");
-  $scope.products = HouseData.all();  
+  //hide back button
+  $ionicHistory.nextViewOptions({
+    disableAnimate: true,
+    historyRoot: true
+  });
+  
+  //$scope.products = HouseData.all();
+  $scope.products = Publish.getPublish($rootScope.userId);
 
   $scope.remove = function (product) {
         HouseData.remove(product);
@@ -301,32 +331,27 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
   }
 })
 
-.controller('PublishCtrl', function($scope, $stateParams, $firebaseObject, $firebaseArray, $rootScope, $state, $cordovaCamera, $cordovaGeolocation) {     
+.controller('PublishCtrl', function($scope, $stateParams, $firebaseObject, $firebaseArray, $rootScope, $state, $cordovaCamera, $cordovaGeolocation, Cities, Zones) {     
       console.log("Publish...");
-      //if (!$rootScope.userSignedIn()){
-        //$state.go('sign-in');
-      //} 
-      $scope.refire = new Firebase("https://sweltering-inferno-1375.firebaseio.com");
+      $scope.refire = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles");
 
-      console.log($stateParams.productId);
       if ($stateParams.productId) {
         console.log("Edit...");
-        var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/"+$stateParams.productId);
-        $scope.product = $firebaseObject(ref);
-        
+        var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles/"+$stateParams.productId);
+        $scope.product = $firebaseObject(ref);        
       } else {
         console.log("New...");
-        $scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};         
+        $scope.product = {cityId: '0', city: 'Cochabamba', description: '', houseId: '', houseType: 'Casa', isBanckCredit: false, isSold: false, image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: 'Venta', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '', zone: '0'};
       }
 
-      //$scope.product = {name: '', sale_price: '', content: {description: ''}, photo: '', lat: -17.37, long: -66.15};
-      //$scope.product = {city: '', description: '', houseId: '', houseType: '', leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
-      
-      //console.log($scope.product.location.latitude);
-      //console.log($scope.product.location.longitude);
+      $scope.cities = Cities.all();
+      $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
 
-    //document.addEventListener("deviceready", function () {
-    $scope.takePicture = function() {
+      $scope.loadZones = function(product) {
+        $scope.zones = Zones.getZonesByCity(product.cityId);       
+      }
+    
+      $scope.takePicture = function() {
           var options = {
               quality : 75,
               destinationType : Camera.DestinationType.DATA_URL,
@@ -342,39 +367,32 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
               //syncArray.$add({image: imageData}).then(function() {
               //    alert("Image has been uploaded");
               //});
-              console.log(imageData);
               $scope.product.photo = imageData;
-
           }, function(error) {
               console.error(error);
           });
       }
 
-    $scope.uploadProduct = function() {
+      $scope.uploadProduct = function() {
+        $scope.product.registerDate = Firebase.ServerValue.TIMESTAMP;
+        $scope.product.userId = $rootScope.userId;
+        $scope.product.location.latitude = $rootScope.latitude;
+        $scope.product.location.longitude = $rootScope.longitude;
 
-      console.log($scope.product.location.latitude);
-      console.log($scope.product.location.longitude);
+        var productRef =  $scope.refire.push($scope.product);
+        var productId = productRef.key();
+        $state.go('app.publishList');
+      }
 
-      var productRef =  $scope.refire.push($scope.product);
-      var productId = productRef.key();
-      $state.go('app.publishList');
-    }
-
-    $scope.goLocation = function() {
-      $state.go('app.publishLocation');
-    }
-
+      $scope.goLocation = function() {
+        $state.go('app.publishLocation');
+      }
 })
 
 .controller('PublishLocationCtrl', function($scope, $rootScope, $state, $cordovaGeolocation) {
      
       console.log("PublishLocation...");
-      //if (!$rootScope.userSignedIn()){
-        //$state.go('sign-in');
-      //} 
-      $scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
-      //var posLat = $scope.product.location.latitude;
-      //var posLon = $scope.product.location.longitude;
+      //$scope.product = {city: '', description: '', houseId: '', houseType: '',image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: '', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '1', zone: ''};
 
       var positionLtLg;
       var myLatlng = new google.maps.LatLng(-17.37, -66.15);
@@ -401,8 +419,6 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       .then(function (position) {
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
-        //$scope.product.location.latitude  = position.coords.latitude
-        //$scope.product.location.longitude = position.coords.longitude
         map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
         marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
@@ -425,37 +441,34 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
         },
         function(position) {
           
-          //$scope.product.location.latitude  = position.coords.latitude;
-          //$scope.product.location.longitude = position.coords.longitude;
-          marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+        marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+        
       });
 
       google.maps.event.addListener(marker, 'dragend', function() {
           $scope.$apply(function(){
             //Stop listening changes
             watch.clearWatch();
-            //var pos = marker.getPosition();
-            positionLtLg = marker.getPosition();
-            //console.log(pos);
-            //$scope.product.location.latitude  = pos.A;
-            //$scope.product.location.longitude = pos.F;
-            console.log(positionLtLg.A);
-            console.log(positionLtLg.F);
+            //var pos = marker.getPosition();                    
           });
       });
 
       $scope.setLocation = function() {
 
-        positionLtLg = marker.getPosition();
+        var positionLtLg = marker.getPosition();
+        console.log("lat " + positionLtLg.lat());
+        console.log("lon " + positionLtLg.lng());
 
-        $scope.product.location.latitude  = positionLtLg.A;
-        $scope.product.location.longitude = positionLtLg.F;
-        console.log($scope.product.location.latitude);
-        console.log($scope.product.location.longitude);
-    
+        $rootScope.latitude = positionLtLg.lat();
+        $rootScope.longitude = positionLtLg.lng();
         $state.go('app.publish');
       }
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+.controller('FavoritesCtrl', function($scope, $rootScope, $state, $ionicHistory) {
+  console.log("FavoritesCtrl...");
+
+})
+
+
+;
