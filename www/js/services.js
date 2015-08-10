@@ -178,10 +178,11 @@ angular.module('starter.services', ['firebase', 'ngCordova', 'ionic.service.core
             return products;
         },
         remove: function (product) {
-            console.log("services... " + product.$id);
-            products.$remove(product).then(function (ref) {
-                ref.key() === product.$id; // true item has been removed
-            });
+            ref.child(product.$id).remove();
+            /*products.$remove(product).then(function (ref) {
+                ref.child.key() === product.$id; // true item has been removed
+
+            });*/
         },
         updateIsSold: function (product) {
             products.$remove(product).then(function (ref) {

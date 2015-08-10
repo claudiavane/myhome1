@@ -341,14 +341,14 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
         $scope.product = $firebaseObject(ref);        
       } else {
         console.log("New...");
-        $scope.product = {cityId: '0', city: 'Cochabamba', description: '', houseId: '', houseType: 'Casa', isBanckCredit: false, isSold: false, image:{img1080x1440:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}], img300x400:[{height:'',url:'http://i.imgur.com/6u9VgMe.jpg',width:''}]}, leaseType: 'Venta', location: {latitude: -17.37, longitude: -66.15}, price: '', registerDate: '', status: 'Activo', surface: '', surfaceBuild: '', userId: '', zone: '0'};
+        $scope.product = {city: 'Cochabamba', description: '', houseId: '1', houseType: 'Casa', isBanckCredit: false, isSold: false, image:{img1080x1440:[{height:'40',url:'http://i.imgur.com/6u9VgMe.jpg',width:'40'}], img300x400:[{height:'40',url:'http://i.imgur.com/6u9VgMe.jpg',width:'40'}]}, leaseType: 'Venta', location: {latitude: -17.37, longitude: -66.15}, price: 0, registerDate: '', status: 'Activo', surface: 0, surfaceBuild: 0, userId: '', zone: ''};
       }
 
       $scope.cities = Cities.all();
       $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
 
       $scope.loadZones = function(product) {
-        $scope.zones = Zones.getZonesByCity(product.cityId);       
+        $scope.zones = Zones.getZonesByCity(0);       
       }
     
       $scope.takePicture = function() {
@@ -374,13 +374,27 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
       }
 
       $scope.uploadProduct = function() {
-        $scope.product.registerDate = Firebase.ServerValue.TIMESTAMP;
-        $scope.product.userId = $rootScope.userId;
-        $scope.product.location.latitude = $rootScope.latitude;
-        $scope.product.location.longitude = $rootScope.longitude;
+        //validar si es un create o update
+        if ($stateParams.productId) {
+          console.log("update: " + $stateParams.productId);
+          console.log("city: " + $scope.product.city);
+          console.log("description: " + $scope.product.description);
+          console.log("contact.email: " + $scope.product.contact.email);
+          console.log("contact.name: " + $scope.product.contact.name);
+          console.log("contact.phone: " + $scope.product.contact.phone);
+          console.log("contact.phone: " + $scope.product.contact.phone);
 
-        var productRef =  $scope.refire.push($scope.product);
-        var productId = productRef.key();
+          var productRef =  $scope.refire.set($scope.product);
+        }else{ // es create
+          console.log("create: " );
+          $scope.product.registerDate = Firebase.ServerValue.TIMESTAMP;
+          $scope.product.userId = $rootScope.userId;
+          $scope.product.location.latitude = $rootScope.latitude;
+          $scope.product.location.longitude = $rootScope.longitude;
+
+          var productRef =  $scope.refire.push($scope.product);
+          var productId = productRef.key();
+        }
         $state.go('app.publishList');
       }
 
