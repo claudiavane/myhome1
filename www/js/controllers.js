@@ -312,10 +312,10 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 .controller('PublishListCtrl', function($scope, $rootScope, $state, $stateParams, HouseData, $ionicHistory, Publish) {
   console.log("PublishListCtrl...");
   //hide back button
-  $ionicHistory.nextViewOptions({
+  /*$ionicHistory.nextViewOptions({
     disableAnimate: true,
     historyRoot: true
-  });
+  });*/
   
   //$scope.products = HouseData.all();
   $scope.products = Publish.getPublish($rootScope.userId);
@@ -333,24 +333,24 @@ angular.module('starter.controllers', ['firebase','ngCordova','ionic.service.cor
 
 .controller('PublishCtrl', function($scope, $stateParams, $firebaseObject, $firebaseArray, $rootScope, $state, $cordovaCamera, $cordovaGeolocation, Cities, Zones) {     
       console.log("Publish...");
+      $scope.cities = Cities.all();
+      $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
+
       $scope.refire = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles");
 
       if ($stateParams.productId) {
         console.log("Edit...");
         var ref = new Firebase("https://sweltering-inferno-1375.firebaseio.com/inmuebles/"+$stateParams.productId);
-        $scope.product = $firebaseObject(ref);        
+        $scope.product = $firebaseObject(ref);
       } else {
         console.log("New...");
         $scope.product = {city: 'Cochabamba', description: '', houseId: '1', houseType: 'Casa', isBanckCredit: false, isSold: false, image:{img1080x1440:[{height:'40',url:'http://i.imgur.com/6u9VgMe.jpg',width:'40'}], img300x400:[{height:'40',url:'http://i.imgur.com/6u9VgMe.jpg',width:'40'}]}, leaseType: 'Venta', location: {latitude: -17.37, longitude: -66.15}, price: 0, registerDate: '', status: 'Activo', surface: 0, surfaceBuild: 0, userId: '', zone: ''};
       }
 
-      $scope.cities = Cities.all();
-      $scope.zones =  Zones.all(); //Zones.getZonesByCity($scope.filter.city); 
-
       $scope.loadZones = function(product) {
         $scope.zones = Zones.getZonesByCity(0);       
       }
-    
+
       $scope.takePicture = function() {
           var options = {
               quality : 75,
